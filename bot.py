@@ -6,12 +6,13 @@
 
 # -*- coding: utf-8 -*-
 
-import config
+#import config
 import telebot
 import sys
 import subprocess
 import time
 
+token =  '771932376:AAFavfwj6C-ldY0CUHihyTkJT5zchTktyUQ'
 bot = telebot.TeleBot(config.token)
 
 helping_msg = "Добрый невечер. Я Галея, управляющий, бармен и вообще душа этого места."
