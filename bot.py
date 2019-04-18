@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 #
 # Copyright (c)
 # 2018 V.Shishkin
@@ -15,7 +16,7 @@ bot = telebot.TeleBot(config.token)
 
 helping_msg = "Добрый невечер. Я Галея, управляющий, бармен и вообще душа этого места."
 #------Command list --------
-@bot.message_handler(commands=['help'])
+@bot.message_handler(content_types=['help'])
 def send_help_msg(message):
     bot.send_message(message.chat.id, helping_msg)
 

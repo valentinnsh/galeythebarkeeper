@@ -38,4 +38,4 @@
 *.out
 *.app
 
-token.py
+config.py

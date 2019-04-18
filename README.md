@@ -1,4 +1,4 @@
-* Who is Galey?
+Who is Galey?
 She is a wonderful person, nice women, barkeeper of a "Bol Dondarya", etc.
 As a telegram bot, her main function is - doing random selection from group members, that tells who is "User of the day" and who is "Pidor of the day"(wihout it negative meaning).
 
