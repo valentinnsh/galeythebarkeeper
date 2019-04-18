@@ -6,7 +6,7 @@
 # -*- coding: utf-8 -*-
 
 #import config
-import telebo
+import telebot
 import subprocess
 import time
 
