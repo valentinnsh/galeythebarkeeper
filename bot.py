@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 #
 # Copyright (c)
 # 2018 V.Shishkin
@@ -7,8 +6,7 @@
 # -*- coding: utf-8 -*-
 
 #import config
-import telebot
-import sys
+import telebo
 import subprocess
 import time
 
