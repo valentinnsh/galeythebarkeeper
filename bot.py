@@ -21,5 +21,9 @@ helping_msg = "Добрый невечер. Я Галея, управляющи�
 def send_help_msg(message):
     bot.send_message(message.chat.id, helping_msg)
 
+@bot.message_handler(content_types=["text"])
+def repeat_all_messages(message): # Название функции не играет никакой роли, в принципе
+    bot.send_message(message.chat.id, message.text)
+
 if __name__ == '__main__':
     bot.polling(none_stop=True)
