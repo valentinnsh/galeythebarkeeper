@@ -19,6 +19,7 @@ starting_msg = "Добрый невечер. Я Галея, управляющи
 chat_already_msg = "Вы уже открыли дверь однажды"
 alredy_msg = "Ты уже в моем журнале, дорогуша"
 you_are_in_the_book_msg = "Добро пожаловать, теперь ты в книге важных гостей, "
+whait_some_time_msg = "Я уже выбирала сегодня, не спеши. У нас впереди может быть еще вечность..."
 #---------------------------
 #------Command list --------
 
@@ -57,7 +58,7 @@ def register_newcomer(message):
         }
 
         reg_status=0
-        for pos in range(1,len(data['people'])):
+        for pos in range(0,len(data['people'])):
             if message.from_user.username in data['people'][pos]['user']:
                 bot.send_message(message.chat.id, alredy_msg)
                 reg_status = 1
@@ -67,8 +68,21 @@ def register_newcomer(message):
             json_file.close()
     with open('data' + str(message.chat.id) + '.json', 'w') as outfile:
         json.dump(data, outfile)
-        #--------------------------------------------------
 
+#---------------------User of the day------------------------
+break_time = 0
+@bot.message_handler(commands=['run'])
+def user_of_the_day(message):
+    global break_time
+    if(time.time()-break_time > 30): #57700
+        chat_id = message.chat.id
+        with open('data' + str(chat_id) + '.json') as json_file:
+            data = json.load(json_file)
+            winner = random.choice(data['people'])
+            bot.send_message(message.chat.id, 'Наш победитель сегодня это.... '+'@'+winner['user']+'!')
 
+        break_time = time.time()
+    else:
+        bot.send_message(message.chat.id, whait_some_time_msg)
 if __name__ == '__main__':
     bot.polling(none_stop=True)
