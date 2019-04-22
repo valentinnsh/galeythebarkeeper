@@ -11,7 +11,7 @@ import time
 import random
 import json
 
-token =  '771932376:AAFavfwj6C-ldY0CUHihyTkJT5zchTktyUQ'
+token =  ''
 bot = telebot.TeleBot(token)
 
 helping_msg = ''
