@@ -11,7 +11,7 @@ import time
 import random
 import json
 
-token =  ''
+token =  '771932376:AAFavfwj6C-ldY0CUHihyTkJT5zchTktyUQ'
 bot = telebot.TeleBot(token)
 
 helping_msg = ''
@@ -21,11 +21,13 @@ alredy_msg = "Ты уже в моем журнале, дорогуша"
 you_are_in_the_book_msg = "Добро пожаловать, теперь ты в книге важных гостей, "
 #---------------------------
 #------Command list --------
-@bot.message_handler(commands=['start'])
+
+#--------------Starting--------------------------
+#@bot.message_handler(commands=['start'])
 def start_bot_in_chat(message):
     with open('stat.json') as json_file:
         start_dat = json.load(json_file)
-        if int(message.chat.id) in start_dat['chat']:
+        if message.chat.id in start_dat['chat']:
             bot.send_message(message.chat.id, chat_already_msg)
         else:
             bot.send_message(message.chat.id, starting_msg)
@@ -38,8 +40,15 @@ def start_bot_in_chat(message):
 def send_help_msg(message):
     bot.send_message(message.chat.id, helping_msg)
 
+#-------------------Registration------------------
 @bot.message_handler(commands=['reg'])
 def register_newcomer(message):
+    with open('stat.json') as json_file:
+        start_dat = json.load(json_file)
+        if message.chat.id not in start_dat['chat']:
+            start_bot_in_chat(message)
+
+    json_file.close()
     with open('data' + str(message.chat.id) + '.json') as json_file:
         data = json.load(json_file)
         newcomer = {
@@ -47,13 +56,19 @@ def register_newcomer(message):
             "stats" : [0,0,0,0,0]
         }
 
-        if message.from_user.username in data['people']:
-            bot.send_message(message.chat.id, alredy_msg)
-        else:
+        reg_status=0
+        for pos in range(1,len(data['people'])):
+            if message.from_user.username in data['people'][pos]['user']:
+                bot.send_message(message.chat.id, alredy_msg)
+                reg_status = 1
+        if(reg_status == 0):
+            bot.send_message(message.chat.id, you_are_in_the_book_msg + str(message.from_user.first_name))
             data['people'].append(newcomer)
-            with open('data' + str(message.chat.id) + '.json', 'w') as outfile:
-                json.dump(data, outfile)
-                bot.send_message(message.chat.id, you_are_in_the_book_msg + str(message.from_user.first_name))
+            json_file.close()
+    with open('data' + str(message.chat.id) + '.json', 'w') as outfile:
+        json.dump(data, outfile)
+        #--------------------------------------------------
+
 
 if __name__ == '__main__':
     bot.polling(none_stop=True)
