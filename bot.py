@@ -11,7 +11,7 @@ import time
 import random
 import json
 
-token =  ''
+token =  '771932376:AAFavfwj6C-ldY0CUHihyTkJT5zchTktyUQ'
 bot = telebot.TeleBot(token)
 
 helping_msg = ''
@@ -79,10 +79,43 @@ def user_of_the_day(message):
         with open('data' + str(chat_id) + '.json') as json_file:
             data = json.load(json_file)
             winner = random.choice(data['people'])
-            bot.send_message(message.chat.id, 'Наш победитель сегодня это.... '+'@'+winner['user']+'!')
+            bot.send_message(message.chat.id, 'Наш победитель сегодня это.... '+'@'+ winner['user']+'!')
 
         break_time = time.time()
+        for pos in range(0,len(data['people'])):
+                if  (winner ==  data['people'][pos]):
+                    data['people'][pos]['stats'][0] += 1
+
+        break_time = time.time()
+        json_file.close()
+        with open('data' + str(message.chat.id) + '.json', 'w') as outfile:
+            json.dump(data, outfile)
     else:
         bot.send_message(message.chat.id, whait_some_time_msg)
+
+#---------------------Pidor of the day------------------------
+p_break_time = 0
+@bot.message_handler(commands=['pidor'])
+def user_of_the_day(message):
+    global p_break_time
+    if(time.time()-p_break_time > 30): #57700
+        chat_id = message.chat.id
+        with open('data' + str(chat_id) + '.json') as json_file:
+            data = json.load(json_file)
+            winner = random.choice(data['people'])
+            bot.send_message(message.chat.id, 'Пип,пип,пип... Пидор найден! '+'@'+winner['user']+'!')
+            for pos in range(0,len(data['people'])):
+                if  (winner ==  data['people'][pos]):
+                    print("OK!")
+                    data['people'][pos]['stats'][1] += 1
+
+        p_break_time = time.time()
+        json_file.close()
+        with open('data' + str(message.chat.id) + '.json', 'w') as outfile:
+            json.dump(data, outfile)
+
+    else:
+        bot.send_message(message.chat.id, whait_some_time_msg)
+
 if __name__ == '__main__':
     bot.polling(none_stop=True)
