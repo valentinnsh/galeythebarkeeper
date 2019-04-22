@@ -10,6 +10,7 @@ import telebot
 import time
 import random
 import json
+from telebot import types
 
 token =  ''
 bot = telebot.TeleBot(token)
@@ -79,7 +80,7 @@ def user_of_the_day(message):
         with open('data' + str(chat_id) + '.json') as json_file:
             data = json.load(json_file)
             winner = random.choice(data['people'])
-            bot.send_message(message.chat.id, 'Наш победитель сегодня это.... '+'@'+ winner['user']+'!')
+            bot.reply_to(message, 'Наш красавчик сегодня это.... '+'@'+ winner['user']+'!')
 
         break_time = time.time()
         for pos in range(0,len(data['people'])):
@@ -91,7 +92,7 @@ def user_of_the_day(message):
         with open('data' + str(message.chat.id) + '.json', 'w') as outfile:
             json.dump(data, outfile)
     else:
-        bot.send_message(message.chat.id, whait_some_time_msg)
+        bot.reply_to(messagе, whait_some_time_msg)
 
 #---------------------Pidor of the day------------------------
 p_break_time = 0
@@ -103,7 +104,7 @@ def user_of_the_day(message):
         with open('data' + str(chat_id) + '.json') as json_file:
             data = json.load(json_file)
             winner = random.choice(data['people'])
-            bot.send_message(message.chat.id, 'Пип,пип,пип... Пидор найден! '+'@'+winner['user']+'!')
+            bot.reply_to(message, 'Пип,пип,пип... Пидор найден! '+'@'+winner['user']+'!')
             for pos in range(0,len(data['people'])):
                 if  (winner ==  data['people'][pos]):
                     print("OK!")
@@ -115,7 +116,17 @@ def user_of_the_day(message):
             json.dump(data, outfile)
 
     else:
-        bot.send_message(message.chat.id, whait_some_time_msg)
+        bot.reply_to(message, whait_some_time_msg)
 
+#-----------------------See stats------------------------------
+@bot.message_handler(commands=['stats'])
+def see_stats(message):
+    with open('data' + str(message.chat.id) + '.json') as json_file:
+        data = json.load(json_file)
+        markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+        markup.row('Красавчик')
+        markup.row('Пидор')
+
+        bot.send_message(message.chat.id, "Какую статистику хотите увидеть? ", reply_markup=markup)
 if __name__ == '__main__':
     bot.polling(none_stop=True)
